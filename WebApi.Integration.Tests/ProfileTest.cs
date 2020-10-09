@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Domain.Entities;
@@ -33,6 +34,12 @@ namespace WebApi.Integration.Tests
             
             Assert.Single(profileList);
             Assert.Equal("jk@web-solutions.sk", profileList[0].Email);
+            
+            // Auditable entity props
+            Assert.NotEmpty(profileList[0].CreatedBy);
+            Assert.IsType<DateTime>(profileList[0].Created);
+            Assert.Null(profileList[0].LastModifiedBy);
+            Assert.Null(profileList[0].LastModified);
         }
     }
 }
