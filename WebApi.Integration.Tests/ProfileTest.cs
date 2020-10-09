@@ -1,40 +1,30 @@
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Domain.Entities;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using WebApi.Integration.Tests.Setup;
 using Xunit;
 
 namespace WebApi.Integration.Tests
 {
-    public class ProfileTest : IClassFixture<CustomWebApplicationFactory<WebApi.Startup>>
+    public class ProfileTest : BaseTest
     {
-        private readonly CustomWebApplicationFactory<Startup> _factory;
-        private HttpClient _client;
-
-        public ProfileTest(CustomWebApplicationFactory<WebApi.Startup> factory)
+        public ProfileTest(CustomWebApplicationFactory<Startup> factory) : base(factory)
         {
-            _factory = factory;
-            _client = factory.CreateClient(new WebApplicationFactoryClientOptions
-            {
-                AllowAutoRedirect = false
-            });
         }
 
         [Fact]
         public async Task Get_ProfileList()
         {
-            var response = await _client.GetAsync("/api/Profile");
-            
+            var response = await Client.GetAsync("/api/Profile");
+
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             var profileList = JsonConvert.DeserializeObject<Profile[]>(content);
-            
+
             Assert.Single(profileList);
             Assert.Equal("jk@web-solutions.sk", profileList[0].Email);
-            
+
             // Auditable entity props
             Assert.NotEmpty(profileList[0].CreatedBy);
             Assert.IsType<DateTime>(profileList[0].Created);
