@@ -23,7 +23,10 @@ namespace WebApi
                     await context.Database.EnsureDeletedAsync();
                 }
 
-                await context.Database.MigrateAsync();
+                if (context.Database.IsSqlServer())
+                {
+                    await context.Database.MigrateAsync();
+                }
 
                 var seeds = scope.ServiceProvider.GetServices<ISeed>();
                 foreach (var seed in seeds)
@@ -39,7 +42,7 @@ namespace WebApi
             await host.RunAsync();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
     }

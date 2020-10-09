@@ -18,7 +18,7 @@ namespace WebApi.Controllers
         }
         
         [HttpGet]
-        public IEnumerable<Profile> List()
+        public IEnumerable<Profile> Index()
         {
             return _dbContext.Profiles;
         }
