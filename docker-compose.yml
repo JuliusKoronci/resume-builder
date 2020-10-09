@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  juliusmssql:
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Koronci-22"
+      MSSQL_PID: Express
+    ports:
+      - "1433:1433"
