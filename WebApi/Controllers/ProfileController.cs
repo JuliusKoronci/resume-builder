@@ -21,7 +21,7 @@ namespace WebApi.Controllers
         {
             var profile = await Mediator.Send(new GetProfileQuery {Id = id});
 
-            if (null == profile) return NotFound();
+            if (profile == null) return NotFound();
 
             return profile;
         }
