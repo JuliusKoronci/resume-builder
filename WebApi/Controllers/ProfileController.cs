@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Application.Interfaces;
+using Application.Profile.Queries;
 using Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WebApi.Controllers
 {
@@ -10,17 +12,14 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     public class ProfileController : Controller
     {
-        private readonly IApplicationDbContext _dbContext;
+        private IMediator _mediator;
 
-        public ProfileController(IApplicationDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
-        
+        protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+
         [HttpGet]
-        public IEnumerable<Profile> Index()
+        public async Task<IEnumerable<Profile>> Get()
         {
-            return _dbContext.Profiles;
+            return await Mediator.Send(new GetProfileQuery());
         }
     }
 }
