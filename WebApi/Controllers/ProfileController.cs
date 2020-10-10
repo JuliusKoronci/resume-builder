@@ -2,24 +2,28 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Profile.Queries;
 using Domain.Entities;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace WebApi.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProfileController : Controller
+    public class ProfileController : ApiBaseController
     {
-        private IMediator _mediator;
-
-        protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
-
         [HttpGet]
         public async Task<IEnumerable<Profile>> Get()
         {
-            return await Mediator.Send(new GetProfileQuery());
+            var profileList = await Mediator.Send(new GetProfileListQuery());
+
+            return profileList;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Profile>> GetById(int id)
+        {
+            var profile = await Mediator.Send(new GetProfileQuery {Id = id});
+
+            if (null == profile) return NotFound();
+
+            return profile;
         }
     }
 }

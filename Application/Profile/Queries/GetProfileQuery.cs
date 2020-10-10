@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Interfaces;
@@ -7,25 +7,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Profile.Queries
 {
-    public class GetProfileQuery : IRequest<IEnumerable<Domain.Entities.Profile>>
+    public class GetProfileQuery : IRequest<Domain.Entities.Profile>
     {
-    }
+        public int Id;
 
-    public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, IEnumerable<Domain.Entities.Profile>>
-    {
-        private readonly IApplicationDbContext _dbContext;
-
-        public GetProfileQueryHandler(IApplicationDbContext dbContext)
+        public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, Domain.Entities.Profile>
         {
-            _dbContext = dbContext;
-        }
+            private readonly IApplicationDbContext _dbContext;
 
-        public async Task<IEnumerable<Domain.Entities.Profile>> Handle(GetProfileQuery request,
-            CancellationToken cancellationToken)
-        {
-            var profiles = await _dbContext.Profiles.ToListAsync(cancellationToken);
+            public GetProfileQueryHandler(IApplicationDbContext dbContext)
+            {
+                _dbContext = dbContext;
+            }
 
-            return profiles?.AsReadOnly();
+            public async Task<Domain.Entities.Profile> Handle(GetProfileQuery request,
+                CancellationToken cancellationToken)
+            {
+                var profile = await _dbContext.Profiles.Where(p => p.Id == request.Id)
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                return profile;
+            }
         }
     }
 }
