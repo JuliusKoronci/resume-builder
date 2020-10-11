@@ -1,4 +1,3 @@
-using System;
 using System.Net;
 using System.Threading.Tasks;
 using Domain.Entities;
@@ -23,14 +22,8 @@ namespace WebApi.Integration.Tests
             var content = await response.Content.ReadAsStringAsync();
             var profileList = JsonConvert.DeserializeObject<Profile[]>(content);
 
-            Assert.Single(profileList);
-            Assert.Equal("jk@web-solutions.sk", profileList[0].Email);
-
-            // Auditable entity props
-            Assert.NotEmpty(profileList[0].CreatedBy);
-            Assert.IsType<DateTime>(profileList[0].Created);
-            Assert.Null(profileList[0].LastModifiedBy);
-            Assert.Null(profileList[0].LastModified);
+            AuditableTest.EnsureNotModifiedAuditableEntity(profileList[0]);
+            AuditableTest.EqualsIgnoreAuditableProps(profileList[0], Utilities.GetTestProfile());
         }
 
         [Fact]
@@ -41,14 +34,8 @@ namespace WebApi.Integration.Tests
             var content = await response.Content.ReadAsStringAsync();
             var profile = JsonConvert.DeserializeObject<Profile>(content);
 
-            Assert.Equal("jk@web-solutions.sk", profile.Email);
-            Assert.Equal(1, profile.Id);
-
-            // Auditable entity props
-            Assert.NotEmpty(profile.CreatedBy);
-            Assert.IsType<DateTime>(profile.Created);
-            Assert.Null(profile.LastModifiedBy);
-            Assert.Null(profile.LastModified);
+            AuditableTest.EnsureNotModifiedAuditableEntity(profile);
+            AuditableTest.EqualsIgnoreAuditableProps(profile, Utilities.GetTestProfile());
         }
 
         [Fact]
