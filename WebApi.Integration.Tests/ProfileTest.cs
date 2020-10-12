@@ -66,6 +66,8 @@ namespace WebApi.Integration.Tests
                     Headers = {ContentType = new MediaTypeHeaderValue("application/json")}
                 });
 
+            response.EnsureSuccessStatusCode();
+
             var profile = JsonConvert.DeserializeObject<Profile>(await response.Content.ReadAsStringAsync());
             AuditableTest.EnsureNotModifiedAuditableEntity(profile);
             AuditableTest.EqualsIgnoreAuditableProps(profile, postObj);
