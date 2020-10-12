@@ -1,4 +1,7 @@
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Domain.Entities;
 using Newtonsoft.Json;
@@ -43,6 +46,29 @@ namespace WebApi.Integration.Tests
         {
             var response = await Client.GetAsync("/api/Profile/2");
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Post_Should_Create_Profile()
+        {
+            var postObj = new Profile
+            {
+                Id = 2,
+                Email = "jk2@web-solutions.sk",
+                FirstName = "Julius2",
+                LastName = "Koronci2",
+                PhoneNumber = "0767654430",
+                WebSite = "www.web-solutions.sk"
+            };
+            var response = await Client.PostAsync("/api/profile",
+                new StringContent(JsonConvert.SerializeObject(postObj), Encoding.UTF8)
+                {
+                    Headers = {ContentType = new MediaTypeHeaderValue("application/json")}
+                });
+
+            var profile = JsonConvert.DeserializeObject<Profile>(await response.Content.ReadAsStringAsync());
+            AuditableTest.EnsureNotModifiedAuditableEntity(profile);
+            AuditableTest.EqualsIgnoreAuditableProps(profile, postObj);
         }
     }
 }
