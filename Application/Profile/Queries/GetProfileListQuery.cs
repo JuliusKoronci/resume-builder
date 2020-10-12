@@ -2,30 +2,35 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Interfaces;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Profile.Queries
 {
-    public class GetProfileListQuery : IRequest<IEnumerable<Domain.Entities.Profile>>
+    public class GetProfileListQuery : IRequest<IEnumerable<GetProfileDto>>
     {
     }
 
-    public class GetProfileQueryHandler : IRequestHandler<GetProfileListQuery, IEnumerable<Domain.Entities.Profile>>
+    public class GetProfileQueryHandler : IRequestHandler<GetProfileListQuery, IEnumerable<GetProfileDto>>
     {
         private readonly IApplicationDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public GetProfileQueryHandler(IApplicationDbContext dbContext)
+        public GetProfileQueryHandler(IApplicationDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Domain.Entities.Profile>> Handle(GetProfileListQuery request,
+        public async Task<IEnumerable<GetProfileDto>> Handle(GetProfileListQuery request,
             CancellationToken cancellationToken)
         {
-            var profiles = await _dbContext.Profiles.ToListAsync(cancellationToken);
+            var profiles = await _dbContext.Profiles.ProjectTo<GetProfileDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
 
-            return profiles?.AsReadOnly();
+            return profiles;
         }
     }
 }

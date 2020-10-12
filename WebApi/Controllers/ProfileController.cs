@@ -17,13 +17,13 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Profile>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             var profile = await Mediator.Send(new GetProfileQuery {Id = id});
 
             if (profile == null) return NotFound();
 
-            return profile;
+            return Ok(profile);
         }
     }
 }
