@@ -1,4 +1,4 @@
-using Application.Profile.Queries;
+using Application.Profile.Dtos;
 
 namespace Application.Common
 {
@@ -7,6 +7,7 @@ namespace Application.Common
         public AutoMapping()
         {
             CreateMap<Domain.Entities.Profile, GetProfileDto>();
+            CreateMap<UpdateProfileDto, Domain.Entities.Profile>();
         }
     }
 }

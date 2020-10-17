@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Interfaces;
+using Application.Profile.Dtos;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;

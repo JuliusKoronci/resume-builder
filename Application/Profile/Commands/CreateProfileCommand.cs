@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Interfaces;
-using Application.Profile.Queries;
+using Application.Profile.Dtos;
 using AutoMapper;
 using MediatR;
 

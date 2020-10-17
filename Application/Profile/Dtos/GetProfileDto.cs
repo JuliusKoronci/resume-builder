@@ -1,6 +1,6 @@
 using System;
 
-namespace Application.Profile.Queries
+namespace Application.Profile.Dtos
 {
     public class GetProfileDto
     {

@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Interfaces;
+using Application.Profile.Dtos;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
