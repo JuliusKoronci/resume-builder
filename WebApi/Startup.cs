@@ -1,4 +1,7 @@
 using Application;
+using HotChocolate;
+using HotChocolate.AspNetCore;
+using HotChocolate.Execution.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Persistence;
 using Persistence.Context;
+using WebApi.GraphQL;
 
 namespace WebApi
 {
@@ -23,6 +27,15 @@ namespace WebApi
         {
             services.AddApplication();
             services.AddPersistence(Configuration);
+
+            services.AddGraphQL(
+                SchemaBuilder
+                    .New()
+                    .AddQueryType<Query>()
+                    .AddMutationType<Mutation>()
+                    .Create(),
+                new QueryExecutionOptions {ForceSerialExecution = true}
+            );
 
             services.AddHttpContextAccessor();
             services.AddHealthChecks()
@@ -45,6 +58,8 @@ namespace WebApi
             app.UseSwaggerUi3(settings => { settings.Path = "/api"; });
 
             app.UseRouting();
+            app.UseGraphQL();
+            app.UsePlayground();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
