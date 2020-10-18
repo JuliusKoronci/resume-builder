@@ -18,7 +18,6 @@ namespace Application.Profile.Commands
         }
 
         public int Id { get; set; }
-        public UpdateProfileDto Profile { get; set; }
     }
 
     public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand, GetProfileDto>

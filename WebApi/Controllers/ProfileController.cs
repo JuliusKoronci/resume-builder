@@ -47,7 +47,10 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
-            return Ok(await Mediator.Send(new DeleteProfileCommand(id)));
+            var deleted = await Mediator.Send(new DeleteProfileCommand(id));
+
+            if (deleted == null) return NotFound();
+            return NoContent();
         }
     }
 }

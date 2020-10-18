@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.Profile.Commands
 {
-    public class DeleteProfileCommand : IRequest
+    public class DeleteProfileCommand : IRequest<Unit?>
     {
         public DeleteProfileCommand(int id)
         {
@@ -15,7 +15,7 @@ namespace Application.Profile.Commands
         public int Id { get; set; }
     }
 
-    public class HandleDeleteProfile : IRequestHandler<DeleteProfileCommand>
+    public class HandleDeleteProfile : IRequestHandler<DeleteProfileCommand, Unit?>
     {
         private readonly IApplicationDbContext _dbContext;
 
@@ -24,11 +24,11 @@ namespace Application.Profile.Commands
             _dbContext = dbContext;
         }
 
-        public async Task<Unit> Handle(DeleteProfileCommand request, CancellationToken cancellationToken)
+        public async Task<Unit?> Handle(DeleteProfileCommand request, CancellationToken cancellationToken)
         {
             var entity = await _dbContext.Profiles.FindAsync(request.Id);
 
-            if (entity == null) return Unit.Value;
+            if (entity == null) return null;
 
             _dbContext.Profiles.Remove(entity);
 
