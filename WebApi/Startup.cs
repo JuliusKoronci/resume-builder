@@ -31,8 +31,8 @@ namespace WebApi
             services.AddGraphQL(
                 SchemaBuilder
                     .New()
-                    .AddQueryType<Query>()
-                    .AddMutationType<Mutation>()
+                    .AddQueryType<ProfileQuery>()
+                    .AddMutationType<ProfileMutation>()
                     .Create(),
                 new QueryExecutionOptions {ForceSerialExecution = true}
             );

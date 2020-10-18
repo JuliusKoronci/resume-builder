@@ -6,11 +6,11 @@ using MediatR;
 
 namespace WebApi.GraphQL
 {
-    public class Query
+    public class ProfileQuery
     {
         private readonly IMediator _mediator;
 
-        public Query(IMediator mediator)
+        public ProfileQuery(IMediator mediator)
         {
             _mediator = mediator;
         }

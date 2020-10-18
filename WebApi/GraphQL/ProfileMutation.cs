@@ -5,11 +5,11 @@ using MediatR;
 
 namespace WebApi.GraphQL
 {
-    public class Mutation
+    public class ProfileMutation
     {
         private readonly IMediator _mediator;
 
-        public Mutation(IMediator mediator)
+        public ProfileMutation(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -21,9 +21,9 @@ namespace WebApi.GraphQL
             return id;
         }
 
-        public async Task<GetProfileDto> CreateProfile(CreateProfileCommand command)
+        public async Task<GetProfileDto> CreateProfile(CreateProfileCommand profileCommand)
         {
-            return await _mediator.Send(command);
+            return await _mediator.Send(profileCommand);
         }
 
         public async Task<GetProfileDto> UpdateProfile(int id, UpdateProfileDto profile)
