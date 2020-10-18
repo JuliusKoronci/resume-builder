@@ -4,7 +4,6 @@ using Application.Interfaces;
 using Application.Profile.Dtos;
 using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.JsonPatch;
 
 namespace Application.Profile.Commands
 {
@@ -19,7 +18,7 @@ namespace Application.Profile.Commands
         }
 
         public int Id { get; set; }
-        public JsonPatchDocument<UpdateProfileDto> PatchDocument { get; set; }
+        public UpdateProfileDto Profile { get; set; }
     }
 
     public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand, GetProfileDto>
